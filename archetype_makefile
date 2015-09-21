@@ -24,7 +24,15 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 _OBJ = hellomake.o hellofunc.o 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-# rule: all "*.o" depend on "*.c" and the "DEPS" and should be compiled as displayed below 
+# general notes on rules: 
+# syntax is "left: right1 right2 ... "
+# and means that the "left" depends on "right1", "right2", ... and should be recompiled every time one of them changes
+# the way to compile it, is given in the next line (always beginning with a <TAB> !!!)
+# $@ means the name on the left side of the ':'
+# $^ is all the names on the right side of the ':'
+# $< is the first name on the right side of the ':'
+
+# rule: all "*.o" depend on "*.c" and the "DEPS" and should be compiled as displayed below every time one of their dependences change
 $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
@@ -36,6 +44,7 @@ hellomake: $(OBJ)
 .PHONY: clean
 
 # remove all "*.o" files in the "ODIR" directory, as well as all temp files (marked with an '~' character)
+# will be run be calling "make clean" from the terminal
 clean:
 	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 
