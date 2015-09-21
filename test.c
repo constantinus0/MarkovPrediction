@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "functions.h"
+//#include "functions.h"
 
 int status,i,j;
-double *series;
+double *series, *diff_series;
+double min, max;
 int N;
 
 int main(int argc, char *argv[]){
@@ -17,15 +18,16 @@ int main(int argc, char *argv[]){
   }
 
   printf("Number of lines: %d\n", N);
-  printf("%f\n", series[0]);
+
+  status = diff(series, N, &diff_series);
 
   for (i = 0; i < N; i++) {
-      printf("(%02d): %lf\n", i+1, series[i]);
+    printf("(%02d): %lf, %lf\n", i+1, series[i], diff_series[i]);
   }
 
+  status = minmax(series, N, &min, &max);
 
-
-
+  printf("Min = %lf\tMax = %lf\n", min, max);
 
   return 0;
 }
