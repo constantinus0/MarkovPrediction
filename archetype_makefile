@@ -44,7 +44,7 @@ hellomake: $(OBJ)
 .PHONY: clean
 
 # remove all "*.o" files in the "ODIR" directory, as well as all temp files (marked with an '~' character)
-# will be run be calling "make clean" from the terminal
+# will be run by calling "make clean" from the terminal
 clean:
 	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 

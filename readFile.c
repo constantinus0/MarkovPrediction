@@ -5,6 +5,7 @@
 int readFile(char filename[], double **data, int *length) {
 
   FILE *fid = fopen(filename, "r");
+  double x;
   char ch;
   int i;
 

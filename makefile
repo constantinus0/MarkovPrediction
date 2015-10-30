@@ -32,10 +32,10 @@ $(ODIR)/%.o: %.c
 test.exe: $(OBJ)
 	gcc -o $@ test.c $^ $(CFLAGS)
 
-# specifies that the "clean" rule does not depend on specific files, so that the makefile will not try to re-run it when things change. Alsi useful in "all" rules. 
+# specifies that the "clean" rule does not depend on specific files, so that the makefile will not try to re-run it when things change. Also useful in "all" rules. 
 .PHONY: clean
 
 # remove all "*.o" files in the "ODIR" directory, as well as all temp files (marked with an '~' character). To be executed by calling "make clean".
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ ./*.o
+	rm -f $(ODIR)/*.o *~ *.exe core $(INCDIR)/*~ ./*.o
 
