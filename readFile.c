@@ -6,21 +6,21 @@ int readFile(char filename[], double **data, int *length) {
 
   FILE *fid = fopen(filename, "r");
   double x;
-  char ch;
+  char ch, *buffer;
   int i;
+
+  int MAX_N = 1000;
 
   if (fid == NULL ) {
       perror("Error while opening the file.\n");
       return -1;
   }
 
+  buffer = (char *) malloc(MAX_N);
+
   length[0] = 0;
-  while ( !feof(fid) ) {
-      ch = fgetc(fid);
-      if(ch == '\n')
-      {
-          length[0]++;
-      }
+  while (fgets(buffer, MAX_N, fid) != NULL ) {
+    length[0]++;
   }
 
   //  printf("(in)Number of lines: %d\n", length[0]);
@@ -30,10 +30,10 @@ int readFile(char filename[], double **data, int *length) {
   *data = (double *) malloc(length[0]);
 
   for (i=0; i < length[0]; i++) {
-    fscanf(fid, "%lf\n", &data[0][i]);
+    fscanf(fid, "%lf", &data[0][i]);
    }
 
   fclose(fid);
-  //  printf("(in) Complete!\n");
+  free(buffer);
   return 0;
 }

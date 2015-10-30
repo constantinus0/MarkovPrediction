@@ -21,7 +21,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 # this just prepends the IDIR before the _DEPS string
 
 # object files
-_OBJ = readFile.o diff.o minmax.o
+_OBJ = readFile.o diff.o minmax.o baseVector.o stateMatrix.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 # rule: all "*.o" depend on "*.c" and the "DEPS" and should be compiled as displayed below 
@@ -29,8 +29,8 @@ $(ODIR)/%.o: %.c
 	$(CC) -c -o $@ $^ $(CFLAGS)
 
 # rule: 
-test.exe: $(OBJ)
-	gcc -o $@ test.c $^ $(CFLAGS)
+test.exe: test.c $(OBJ)
+	gcc -o $@ $^ $(CFLAGS)
 
 # specifies that the "clean" rule does not depend on specific files, so that the makefile will not try to re-run it when things change. Also useful in "all" rules. 
 .PHONY: clean
