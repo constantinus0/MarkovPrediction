@@ -12,7 +12,7 @@ long *baseVec;
 int main(int argc, char *argv[]){
   // Global Parameters! In final release they should be all given as input arguments!
   diffOrder = 2;
-  nBins = 2;
+  nBins = 3;
   // end of Global Parameter declaration ...........................................
   
   printf("Testgrounds for Markov-Prediction project\n");
@@ -52,7 +52,7 @@ int main(int argc, char *argv[]){
   }
 
   // Phase space:
-  //              nDims = D (diff order + 1 for the original series)
+  //              nDims = D (diff order + 1, the +1 for the original series)
   //              base = number of bins (the No of possible "events" in each dimension)
 
   // Create the base Vector
@@ -61,6 +61,15 @@ int main(int argc, char *argv[]){
 
   // Convert Data Matrix to Symbolic, State Matrix
   status = stateMatrix(data, D, N, nBins, &symb, &binVals);
+
+  for (i=0; i<N; i++){
+    for (j=0; j<D; j++){
+      printf("%d, ", symb[j][i]);
+    }
+    printf("\n");
+  }
+
+  for (i=0; i<nBins; i++){ printf("%f, ", binVals[i]); } printf("\n");
 
   // free(series); // freeing "series" causes "core dumped" error!
   free(diff_series);
