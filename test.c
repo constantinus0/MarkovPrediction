@@ -3,11 +3,11 @@
 // #include "functions.h"
 
 int status, i, j;
-double *series, *diff_series, **data, *binVals;
+double *series, *diff_series, **data, *binVals, **transProbMat;
 double min, max;
-int diffOrder, nBins, N, D, base, vLen, **symb;
+int diffOrder, nBins, N, D, base, vLen, **symb, **trans, nStates;
 long int s;
-long *baseVec;
+int *baseVec;
 
 int main(int argc, char *argv[]){
   // Global Parameters! In final release they should be all given as input arguments!
@@ -57,6 +57,7 @@ int main(int argc, char *argv[]){
 
   // Create the base Vector
   status = baseVector(D, nBins, &baseVec);
+  printf("BaseVector : ");
   for(i=0; i<D; i++){ printf("%d, ",baseVec[i]); } printf("\n");
 
   // Convert Data Matrix to Symbolic, State Matrix
@@ -69,8 +70,30 @@ int main(int argc, char *argv[]){
     printf("\n");
   }
 
+  printf("BinVals: ");
   for (i=0; i<nBins; i++){ printf("%f, ", binVals[i]); } printf("\n");
 
+  nStates = transitionMatrix(symb, D, N, nBins, baseVec, &trans);
+  printf("nStates = %d\n", nStates);
+
+  for (i=0; i<nStates; i++){
+    for (j=0; j<nBins; j++){
+      printf("%d, ", trans[i][j]);
+    }
+    printf("\n");
+  }
+  
+  status = probabilityMatrix(trans, nStates, nBins, &transProbMat);
+  printf("Transition Probability Matrix: \n");
+  for (i=0; i<nStates; i++){
+    for (j=0; j<nBins; j++){
+      printf("%.2f, ", transProbMat[i][j]);
+    }
+    printf("\n");
+  }
+
+  
+  
   // free(series); // freeing "series" causes "core dumped" error!
   free(diff_series);
   for (j=0; j<D; j++){ free(data[j]); } free(data);

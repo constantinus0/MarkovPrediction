@@ -69,9 +69,9 @@ int stateMatrix(double **inMatrix, int nRows, int nCols, int nBins,
     }
   }
 
-  printf("unsmoothed: "); for (i=0; i<nBins; i++) { printf("%f, ", binVals[0][i]); } printf("\n");
+  // printf("unsmoothed: "); for (i=0; i<nBins; i++) { printf("%f, ", binVals[0][i]); } printf("\n");
   status = smooth1d(binVals[0], nBins);
-  printf("smoothed: "); for (i=0; i<nBins; i++) { printf("%f, ", binVals[0][i]); } printf("\n");
+  // printf("smoothed: "); for (i=0; i<nBins; i++) { printf("%f, ", binVals[0][i]); } printf("\n");
   
   return 0;
 }

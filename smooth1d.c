@@ -54,12 +54,12 @@ int smooth1d(double *vec, int length) {
 	if (change_status[i] == 1){
 	  vec[i] = 0.5*(prev[i] + prev[i+2]);
 	  rel_diff[i] = fabs(vec[i] - prev[i+1]);
-	  printf("%f, ", rel_diff[i]);
+	  // printf("%f, ", rel_diff[i]);
 	}
       }
 
       status = minmax(rel_diff, length, &buff, &max_rel_diff);
-      printf("max diff = %f\n", max_rel_diff);
+      // printf("max diff = %f\n", max_rel_diff);
 
       for (i=1; i<length+1; i++){ prev[i] = vec[i-1]; }
     }

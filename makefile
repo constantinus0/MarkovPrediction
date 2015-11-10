@@ -21,7 +21,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 # this just prepends the IDIR before the _DEPS string
 
 # object files
-_OBJ = readFile.o diff.o minmax.o baseVector.o stateMatrix.o smooth1d.o
+_OBJ = readFile.o diff.o minmax.o baseVector.o stateId.o stateMatrix.o smooth1d.o transitionMatrix.o probabilityMatrix.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 # rule: all "*.o" depend on "*.c" and the "DEPS" and should be compiled as displayed below 
