@@ -3,9 +3,9 @@
 // #include "functions.h"
 
 int status, i, j;
-double *series, *diff_series, **data, *binVals, **transProbMat;
+double *series, *diff_series, **data, *binVals, **limits, **transProbMat, *initVec;
 double min, max;
-int diffOrder, nBins, N, D, base, vLen, **symb, **trans, nStates;
+int diffOrder, nBins, N, D, base, vLen, **symb, **trans, nStates, *initState, nPred;
 long int s;
 int *baseVec;
 
@@ -13,6 +13,7 @@ int main(int argc, char *argv[]){
   // Global Parameters! In final release they should be all given as input arguments!
   diffOrder = 2;
   nBins = 3;
+  nPred = 5;
   // end of Global Parameter declaration ...........................................
   
   printf("Testgrounds for Markov-Prediction project\n");
@@ -61,7 +62,7 @@ int main(int argc, char *argv[]){
   for(i=0; i<D; i++){ printf("%d, ",baseVec[i]); } printf("\n");
 
   // Convert Data Matrix to Symbolic, State Matrix
-  status = stateMatrix(data, D, N, nBins, &symb, &binVals);
+  status = stateMatrix(data, D, N, nBins, &symb, &binVals, &limits);
 
   for (i=0; i<N; i++){
     for (j=0; j<D; j++){
@@ -72,6 +73,9 @@ int main(int argc, char *argv[]){
 
   printf("BinVals: ");
   for (i=0; i<nBins; i++){ printf("%f, ", binVals[i]); } printf("\n");
+
+  printf("Series limits: \n");
+  for (j=0; j<D; j++){ printf("%f to %f (%f)\n", limits[j][0], limits[j][1], limits[j][2]); }
 
   nStates = transitionMatrix(symb, D, N, nBins, baseVec, &trans);
   printf("nStates = %d\n", nStates);
@@ -92,7 +96,11 @@ int main(int argc, char *argv[]){
     printf("\n");
   }
 
-  
+  // set initial state for prediction module
+  initVec = malloc(D * sizeof(double));
+  for (j=0; j<D; j++){ initVec[j] = data[j][N-1]; }
+  status = prediction(transProbMat, nStates, D, nBins, binVals,
+		      nPred, initVec, baseVec, limits);
   
   // free(series); // freeing "series" causes "core dumped" error!
   free(diff_series);

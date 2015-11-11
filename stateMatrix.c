@@ -5,7 +5,7 @@ int status, i, j, targetBin, *binValCnt;
 double min, max, d, *binValSum;
 
 int stateMatrix(double **inMatrix, int nRows, int nCols, int nBins,
-		int ***outMatrix, double **binVals){
+		int ***outMatrix, double **binVals, double ***lims){
 
   *binVals = malloc(nBins * sizeof(double));
   binValCnt = malloc(nBins * sizeof(int));
@@ -17,12 +17,18 @@ int stateMatrix(double **inMatrix, int nRows, int nCols, int nBins,
   
   *outMatrix = malloc(nRows * sizeof(int*));
   for (j=0; j<nRows; j++){ outMatrix[0][j] = malloc(nCols * sizeof(int)); }
-  
+
+  *lims = malloc(nRows * sizeof(double*));
+  for (j=0; j<nRows; j++){ lims[0][j] = malloc(3 * sizeof(double)); }
   
   for (j=0; j<nRows; j++){
     status = minmax(inMatrix[j], nCols, &min, &max);
     d = max - min;
     printf("min = %f, max = %f, dx = %f\n", min, max, d);
+
+    lims[0][j][0] = min;
+    lims[0][j][1] = max;
+    lims[0][j][2] = d;
 
     // Bins will take values from 0 to nBins-1
     
