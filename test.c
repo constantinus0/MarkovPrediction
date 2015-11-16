@@ -86,6 +86,16 @@ int main(int argc, char *argv[]){
     }
     printf("\n");
   }
+
+  status = smooth2d(trans, D, nBins, nStates);
+  printf("Interpolated Transition Matrix:\n");
+
+  for (i=0; i<nStates; i++){
+    for (j=0; j<nBins; j++){
+      printf("%d, ", trans[i][j]);
+    }
+    printf("\n");
+  }
   
   status = probabilityMatrix(trans, nStates, nBins, &transProbMat);
   printf("Transition Probability Matrix: \n");
