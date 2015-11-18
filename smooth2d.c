@@ -5,7 +5,7 @@
 int iR, iB, iS, i;
 int *changeStatus;
 int contFlag;
-int nN, *sum, neighborState;
+int nN, *sum, neighborState, mod0, mod1;
 
 int smooth2d(int **transMatrix, int nRows, int nBins, int nStates){
   // allocate "sum" buffer (will keep the sum of all transition counts for all bins)
@@ -33,7 +33,7 @@ int smooth2d(int **transMatrix, int nRows, int nBins, int nStates){
   
   printf("Process begins...\n");
   // begin process (flag = true)
-  contFlag = 10;
+  contFlag = 20;
   while (contFlag > 0) {
     for (iS=0; iS<nStates; iS++){ 
 	if (changeStatus[iS] == 1){
@@ -43,10 +43,16 @@ int smooth2d(int **transMatrix, int nRows, int nBins, int nStates){
 	  
 	  for (iR=0; iR<nRows; iR++){
 	    // for each dimension two neighbors might exist (+1 & -1)
+	    // BUG: this rule assumes cyclic (periodic) boundaries. e.g. In 2D with 4 states, the first line would be 0, 1, 2, 3 but then, looking for neighbors of the 3-state the algorith would produce, 2 (correct) but  also 4 (incorrect, since its the first state at the next line!). To deal with this, also check if the +/- 1 neighbors belong in the same line, the +/- nBins neighbors in the same "plane", the +/- 1 nBins^2 in the same "space" and so on.
+
+	    // check
+	    mod0 = (int) (iS / (int) pow(nBins, iR+1));
+	    
 	    // check +1 neighbor
 	    neighborState = iS + (int) pow(nBins, iR);
-	    printf("+1 Neighbor of %d is %d\n", iS, neighborState);
-	    if ((neighborState > 0) && (neighborState < nStates)){
+	    mod1 = (int) (neighborState / (int) pow(nBins, iR+1));
+	    if ((neighborState >= 0) && (neighborState < nStates) && (mod0 == mod1)){
+              printf("+1 Neighbor of %d is %d\n", iS, neighborState);
 	      for (i=0; i<nBins; i++){
 		sum[i] += transMatrix[neighborState][i];
 	      }
@@ -58,8 +64,9 @@ int smooth2d(int **transMatrix, int nRows, int nBins, int nStates){
 	     
 	    // check -1 neighbor
 	    neighborState = iS - (int) pow(nBins, iR);
-	    printf("-1 Neighbor of %d is %d\n", iS, neighborState);
-	    if ((neighborState > 0) && (neighborState < nStates)){
+            mod1 = (int) (neighborState / (int) pow(nBins, iR+1));
+	    if ((neighborState >= 0) && (neighborState < nStates) && (mod0 == mod1)){
+	      printf("-1 Neighbor of %d is %d\n", iS, neighborState);
 	      for (i=0; i<nBins; i++){
 		sum[i] += transMatrix[neighborState][i];
 	      }
@@ -72,7 +79,7 @@ int smooth2d(int **transMatrix, int nRows, int nBins, int nStates){
 
 	  // assign to current grid point the average value of its neighbor points
           for (i=0; i<nBins; i++){
-	    transMatrix[iS][i] = (int) round((float) sum[i]/((float) nN));
+	    transMatrix[iS][i] = (int) ceil((float) sum[i]/((float) nN));
 	  }
 	  
 	}
