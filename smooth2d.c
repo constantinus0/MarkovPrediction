@@ -28,10 +28,10 @@ int smooth2d(int **transMatrix, int nRows, int nBins, int nStates){
     }
   }
 
-  printf("Change Status Vector: \n");
-  for (iS=0; iS<nStates; iS++){ printf("%d, ", changeStatus[iS]); } printf("\n");
+  //printf("Change Status Vector: \n");
+  //for (iS=0; iS<nStates; iS++){ printf("%d, ", changeStatus[iS]); } printf("\n");
   
-  printf("Process begins...\n");
+  //printf("Process begins...\n");
   // begin process (flag = true)
   contFlag = 20;
   while (contFlag > 0) {
@@ -52,7 +52,7 @@ int smooth2d(int **transMatrix, int nRows, int nBins, int nStates){
 	    neighborState = iS + (int) pow(nBins, iR);
 	    mod1 = (int) (neighborState / (int) pow(nBins, iR+1));
 	    if ((neighborState >= 0) && (neighborState < nStates) && (mod0 == mod1)){
-              printf("+1 Neighbor of %d is %d\n", iS, neighborState);
+              //printf("+1 Neighbor of %d is %d\n", iS, neighborState);
 	      for (i=0; i<nBins; i++){
 		sum[i] += transMatrix[neighborState][i];
 	      }
@@ -66,7 +66,7 @@ int smooth2d(int **transMatrix, int nRows, int nBins, int nStates){
 	    neighborState = iS - (int) pow(nBins, iR);
             mod1 = (int) (neighborState / (int) pow(nBins, iR+1));
 	    if ((neighborState >= 0) && (neighborState < nStates) && (mod0 == mod1)){
-	      printf("-1 Neighbor of %d is %d\n", iS, neighborState);
+	      //printf("-1 Neighbor of %d is %d\n", iS, neighborState);
 	      for (i=0; i<nBins; i++){
 		sum[i] += transMatrix[neighborState][i];
 	      }
@@ -83,10 +83,10 @@ int smooth2d(int **transMatrix, int nRows, int nBins, int nStates){
 	  }
 	  
 	}
-	printf("State: %d\n", iS);
+	//printf("State: %d\n", iS);
     }
     contFlag--;
-    printf("loop completed!\n");
+    //printf("loop completed!\n");
   }
 
     

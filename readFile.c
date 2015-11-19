@@ -27,7 +27,7 @@ int readFile(char filename[], double **data, int *length) {
 
   rewind(fid);
 
-  *data = (double *) malloc(length[0]);
+  *data = malloc(length[0] * sizeof(double));
 
   for (i=0; i < length[0]; i++) {
     fscanf(fid, "%lf", &data[0][i]);

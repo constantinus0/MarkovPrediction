@@ -24,7 +24,7 @@ int stateMatrix(double **inMatrix, int nRows, int nCols, int nBins,
   for (j=0; j<nRows; j++){
     status = minmax(inMatrix[j], nCols, &min, &max);
     d = max - min;
-    printf("min = %f, max = %f, dx = %f\n", min, max, d);
+    //printf("min = %f, max = %f, dx = %f\n", min, max, d);
 
     lims[0][j][0] = min;
     lims[0][j][1] = max;

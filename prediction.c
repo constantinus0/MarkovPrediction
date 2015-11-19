@@ -1,58 +1,71 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int status, i, j, k,  nStates, *stateVec;
+int status, i, j, k, s,  nStates, *stateVec;
 long int prevId, nextId;
 int sum;
 time_t t;
-double prob;
+double prob, *vec;
 
-int prediction(double **probMatrix, int nStates, int nRows, int nBins, double *binVals,
-	       int N, double *initVec, int *baseVec, double **lims){
+double **prediction(double **probMatrix, int nStates, int nRows, int nBins, double *binVals, int N, int noScen, double *initVec, int *baseVec, double **lims, double ***predMatrix){
 
   srand((unsigned) time(&t));
 
   stateVec = malloc(nRows * sizeof(int));
   
-  for (k=0; k<N; k++){
+  vec = malloc(nRows * sizeof(double));
 
-    // get state vector (in bin ids)
-    for (j=0; j<nRows; j++){
-      stateVec[j] = binVal(initVec[j], lims[j][0], lims[j][1], lims[j][2], nBins);
-    }
+  // output matrix. Rows: future positions, Cols: different scenarios
+  predMatrix[0] = malloc(N * sizeof(double*));
+  for (k=0; k<N; k++){ predMatrix[0][k] = malloc(noScen * sizeof(double)); }
 
-    // get state Id number
-    prevId = stateId(stateVec, baseVec, nRows);
+  for(s=0; s<noScen; s++){
+    // initialize "vec" to "initVec"
+    for (j=0; j<nRows; j++){ vec[j] = initVec[j]; }
 
-    // get random number [0, 1]
-    prob = (double) rand() / ((double) RAND_MAX);
+    printf("Pred: ");
+    
+    for (k=0; k<N; k++){
+      // get state vector (in bin ids)
+      for (j=0; j<nRows; j++){
+	stateVec[j] = binVal(vec[j], lims[j][0], lims[j][1], lims[j][2], nBins);
+      }
 
-    nextId = -1;
-    j = 0;
-    while (j<nBins){
-      if (prob <= probMatrix[prevId][j]){
-	nextId = j;
-	j = nBins; // exit clause
+      // get state Id number
+      prevId = stateId(stateVec, baseVec, nRows);
+
+      // get random number [0, 1]
+      prob = (double) rand() / ((double) RAND_MAX);
+
+      nextId = -1;
+      j = 0;
+      while (j<nBins){
+	if (prob <= probMatrix[prevId][j]){
+	  nextId = j;
+	  j = nBins; // exit clause
+	}
+	else{
+	  // cont.
+	  j++;
+	}
+      }
+
+      if (nextId < 0){
+	// couldn't find a match
       }
       else{
-	// cont.
-	j++;
-      }
-    }
+	// get next val for max order diff.
+	vec[nRows-1] = binVals[nextId];
 
-    if (nextId < 0){
-      // couldn't find a match
-    }
-    else{
-      // get next val for max order diff.
-      initVec[nRows-1] = binVals[nextId];
-      
-      for (j=nRows-2; j>=0; j--){
-	initVec[j] = initVec[j] + initVec[j+1];
+	for (j=nRows-2; j>=0; j--){
+	  vec[j] = vec[j] + vec[j+1];
+	}
       }
+
+      printf("%f, ", vec[0]);
+      predMatrix[0][k][s] = vec[0];
     }
-    
-    printf("Next Val: %f\n", initVec[0]);
+    printf("\n");
   }
 
   return 0;

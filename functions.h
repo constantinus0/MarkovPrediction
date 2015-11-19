@@ -10,5 +10,5 @@ int smooth1d(double *vec, int length);
 int transitionMatrix(int **stateMatrix, int nRows, int nCols, int nBins, int ***transMatrix);
 int probabilityMatrix(int **transMatrix, int nStates, int nBins, double ***probMatrix);
 int prediction(double **probMatrix, int nStates, int nBins, double *binVals, int N, int *initState, int *baseVec);
-
+int smooth2d(int **transMatrix, int nRows, int nBins, int nStates);
 
