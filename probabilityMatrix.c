@@ -23,6 +23,7 @@ int probabilityMatrix(int **transMatrix, int nStates, int nBins,
         probMatrix[0][i][j] = (double) transMatrix[i][j] / ((double) sum);
       }
       else{
+        printf("No data for state id: %d\n", i);
 	probMatrix[0][i][j] = 0;
       }
     }

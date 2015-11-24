@@ -23,7 +23,7 @@ double **prediction(double **probMatrix, int nStates, int nRows, int nBins, doub
     // initialize "vec" to "initVec"
     for (j=0; j<nRows; j++){ vec[j] = initVec[j]; }
 
-    printf("Pred: ");
+    //printf("Pred: ");
     
     for (k=0; k<N; k++){
       // get state vector (in bin ids)
@@ -51,6 +51,7 @@ double **prediction(double **probMatrix, int nStates, int nRows, int nBins, doub
       }
 
       if (nextId < 0){
+	printf("\n***Warning! Current state could not be resolved! Consider changing the processing parameters!***\n\n");
 	// couldn't find a match
       }
       else{
@@ -62,10 +63,10 @@ double **prediction(double **probMatrix, int nStates, int nRows, int nBins, doub
 	}
       }
 
-      printf("%f, ", vec[0]);
+      // printf("%f, ", vec[0]);
       predMatrix[0][k][s] = vec[0];
     }
-    printf("\n");
+    // printf("\n");
   }
 
   return 0;

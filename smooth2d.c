@@ -4,7 +4,7 @@
 
 int iR, iB, iS, i;
 int *changeStatus;
-int contFlag;
+int contFlag, newVal, change, maxChange;
 int nN, *sum, neighborState, mod0, mod1;
 
 int smooth2d(int **transMatrix, int nRows, int nBins, int nStates){
@@ -33,8 +33,9 @@ int smooth2d(int **transMatrix, int nRows, int nBins, int nStates){
   
   //printf("Process begins...\n");
   // begin process (flag = true)
-  contFlag = 20;
+  contFlag = 100;
   while (contFlag > 0) {
+    maxChange = 0;
     for (iS=0; iS<nStates; iS++){ 
 	if (changeStatus[iS] == 1){
 	  // find neighbors and caclulate their average
@@ -79,16 +80,21 @@ int smooth2d(int **transMatrix, int nRows, int nBins, int nStates){
 
 	  // assign to current grid point the average value of its neighbor points
           for (i=0; i<nBins; i++){
-	    transMatrix[iS][i] = (int) ceil((float) sum[i]/((float) nN));
+	    newVal = (int) ceil((float) sum[i]/((float) nN));
+	    change = transMatrix[iS][i] - newVal;
+	    if (change < 0) { change = -change;} // instead of abs()
+	    if (change > maxChange) { maxChange = change; }
+	    transMatrix[iS][i] = newVal;
 	  }
 	  
 	}
 	//printf("State: %d\n", iS);
     }
     contFlag--;
-    //printf("loop completed!\n");
+    if (maxChange == 0) { break; }
   }
 
+  printf("Interpolation completed at %d iterations!\n", 100 - contFlag);
     
   return 0;
 }

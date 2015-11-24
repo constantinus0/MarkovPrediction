@@ -13,14 +13,14 @@ FILE *fid;
 int main(int argc, char *argv[]){
   // Global Parameters! In final release they should be all given as input arguments!
   diffOrder = 1;
-  nBins = 20;
+  nBins = 21;
   nPred = 50;
   nScen = 10;
   // end of Global Parameter declaration ...........................................
   
   printf("Testgrounds for Markov-Prediction project\n");
 
-  status = readFile("sample_input_04.txt", &series, &N);
+  status = readFile("sample_input.txt", &series, &N);
   if (status == -1) {
       perror("Program will exit!\n");
       return 1;
@@ -47,12 +47,12 @@ int main(int argc, char *argv[]){
   }
 
   // Print Data and Difference Series
-  for (i=0; i<N; i++){
-    for (j=0; j<D; j++){
-      printf("%f, ", data[j][i]);
-    }
-    printf("\n");
-  }
+  /* for (i=0; i<N; i++){ */
+  /*   for (j=0; j<D; j++){ */
+  /*     printf("%f, ", data[j][i]); */
+  /*   } */
+  /*   printf("\n"); */
+  /* } */
 
   // Phase space:
   //              nDims = D (diff order + 1, the +1 for the original series)
@@ -89,18 +89,17 @@ int main(int argc, char *argv[]){
   /*   printf("\n"); */
   /* } */
 
-  //  status = smooth2d(trans, D, nBins, nStates);
-  //  printf("Interpolated Transition Matrix:\n");
-
+  status = smooth2d(trans, D, nBins, nStates);
+  printf("Interpolated Transition Matrix:\n");
   /* for (i=0; i<nStates; i++){ */
   /*   for (j=0; j<nBins; j++){ */
   /*     printf("%d, ", trans[i][j]); */
   /*   } */
-  /*   printf("\n"); */
+  /*   printf("\n\n"); */
   /* } */
   
   status = probabilityMatrix(trans, nStates, nBins, &transProbMat);
-  printf("Transition Probability Matrix: \n");
+  printf("Transition Probability Matrix. \n");
   /* for (i=0; i<nStates; i++){ */
   /*   for (j=0; j<nBins; j++){ */
   /*     printf("%.2f, ", transProbMat[i][j]); */
@@ -115,6 +114,7 @@ int main(int argc, char *argv[]){
 		      nPred, nScen, initVec, baseVec, limits, &output);
 
   // print results to file
+  printf("Writing results to file.\n");
   fid = fopen("prediction.txt", "w");
   for (j=0; j<nPred; j++){
     for (i=0; i<nScen; i++){
@@ -124,8 +124,28 @@ int main(int argc, char *argv[]){
   }
   fclose(fid);
   
-  // free(series); // freeing "series" causes "core dumped" error!
+  free(series);
   free(diff_series);
-  for (j=0; j<D; j++){ free(data[j]); } free(data);
+  for (j=0; j<D; j++){
+    free(data[j]);
+    free(limits[j]);
+  }
+  free(data);
+  free(limits);
+
+  free(binVals);
+  free(initState);
+  free(baseVec);
+  free(initVec);
+
+  for (j=0; j<nStates; j++){
+    free(transProbMat[j]);
+    free(symb[j]);
+    free(trans[j]);
+  }
+  free(transProbMat);
+  free(symb);
+  free(trans);
+  
   return 0;
 }
