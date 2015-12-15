@@ -6,8 +6,7 @@ int status, i, j, k,  nStates, *stateVec;
 long int prevId, nextId;
 int sum;
 
-int probabilityMatrix(int **transMatrix, int nStates, int nBins,
-		      double ***probMatrix){
+int probabilityMatrix(int **transMatrix, int nStates, int nBins, double ***probMatrix){
 
   *probMatrix = malloc(nStates * sizeof(double*));
   for (i=0; i<nStates; i++){ probMatrix[0][i] = malloc(nBins * sizeof(double)); }

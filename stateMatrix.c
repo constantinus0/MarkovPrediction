@@ -5,7 +5,7 @@ int status, i, j, targetBin, *binValCnt;
 double min, max, d, *binValSum;
 
 int stateMatrix(double **inMatrix, int nRows, int nCols, int nBins,
-		int ***outMatrix, double **binVals, double ***lims){
+		int ***outMatrix, double **binVals, double ***lims) {
 
   *binVals = malloc(nBins * sizeof(double));
   binValCnt = malloc(nBins * sizeof(int));

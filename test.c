@@ -12,7 +12,7 @@ FILE *fid;
 
 int main(int argc, char *argv[]){
   // Global Parameters! In final release they should be all given as input arguments!
-  diffOrder = 1;
+  diffOrder = 2;
   nBins = 21;
   nPred = 50;
   nScen = 10;
