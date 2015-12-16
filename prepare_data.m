@@ -49,18 +49,21 @@ disp('Done')
 
 %% Load results and plot prediction scenarios
 
+font_size = 12;
+
 y = load('prediction.txt', '-ascii');
 s = size(y);
 
 subplot(1,2,1);
 plot(t, x, '-o'); xlim([1, L-s(1)]);
-set(gca, 'xtick', [1; (100:100:900)'; 950]);
+set(gca, 'xtick', [1; (100:100:900)'; 950], 'Fontsize', font_size);
 xlabel('time');
 title('Training Series');
 
 subplot(1,2,2);
 plot(t, x, '-ob', L+1:L+s(1), y, '-xr');
-legend('Original Series', 'Prediction');
+set(gca, 'Fontsize', font_size);
+legend('True Values', 'Prediction');
 xlabel('time');
 xlim([L-s(1), L+s(1)]);
 title('Prediction');
